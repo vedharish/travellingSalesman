@@ -1,7 +1,15 @@
 package jp.co.worksap.global;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 public class Orienteering{
     public static void main(String[] args){
-        //TODO
+        BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+        try{
+            OrientMap mapObject = InputParser.getOrientMap(inputReader);
+        }catch(InputParseException e){
+            System.out.println(e);
+        }
     }
 }
