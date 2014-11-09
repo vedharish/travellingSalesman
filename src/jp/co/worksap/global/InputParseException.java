@@ -32,3 +32,15 @@ class WrongNumColsException extends InputParseException{
         return exceptionString+"The given number of columns does not match as given in first line of input.";
     }
 }
+
+class StateNotRecognizedException extends InputParseException{
+    int positionX = -1, positionY = -1;
+    public StateNotRecognizedException(int positionX, int positionY){
+        this.positionX = positionX;
+        this.positionY = positionY;
+    }
+    public String toString(){
+        if(positionX == -1 || positionY == -1) return exceptionString+"The map character cannot be recognized as any block state.";
+        return exceptionString+"The map character at ("+positionX+","+positionY+") cannot be recognized as any block state.";
+    }
+}

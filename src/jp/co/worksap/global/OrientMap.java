@@ -12,6 +12,10 @@ public class OrientMap{
     public int getNumOfColumns(){
         return mapStruct[0].length;
     }
+    public void setBlock(int row, int column, OrientBlock block){
+        // 0 indexed
+        mapStruct[row][column] = block;
+    }
 
 
     //TODO delete

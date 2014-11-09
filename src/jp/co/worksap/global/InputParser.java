@@ -33,8 +33,34 @@ public class InputParser{
             if(inputString == null) throw new WrongNumRowsException();
             inputString = inputString.trim();
             if(inputString.length() != mapObject.getNumOfColumns()) throw new WrongNumColsException();
-            mapObject.print();
+
+            OrientBlock tempBlock;
+            for(int innerIter=0; innerIter<mapObject.getNumOfColumns(); innerIter++){
+                switch(inputString.charAt(innerIter)){
+                    case '.':
+                        tempBlock = OrientBlock.OPEN;
+                        break;
+                    case '#':
+                        tempBlock = OrientBlock.CLOSE;
+                        break;
+                    case '@':
+                        tempBlock = OrientBlock.CHECKPOINT;
+                        break;
+                    case 'G':
+                        tempBlock = OrientBlock.GOAL;
+                        break;
+                    case 'S':
+                        tempBlock = OrientBlock.START;
+                        break;
+                    default:
+                        throw new StateNotRecognizedException(iter, innerIter);
+                }
+                mapObject.setBlock(iter, innerIter, tempBlock);
+            }
         }
+        System.out.println("---");
+        mapObject.print();
+        System.out.println("---");
 
         return mapObject;
     }
