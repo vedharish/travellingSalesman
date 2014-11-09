@@ -6,10 +6,13 @@ import java.io.InputStreamReader;
 public class Orienteering{
     public static void main(String[] args){
         BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+        OrientMap mapObject = null;
         try{
-            OrientMap mapObject = InputParser.getOrientMap(inputReader);
+            mapObject = InputParser.getOrientMap(inputReader);
         }catch(InputParseException e){
             e.printStackTrace();
         }
+        mapObject.print();
+        Solver.solve(mapObject);
     }
 }

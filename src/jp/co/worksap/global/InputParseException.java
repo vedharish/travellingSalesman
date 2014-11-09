@@ -33,6 +33,40 @@ class WrongNumColsException extends InputParseException{
     }
 }
 
+class StartPositionException extends InputParseException{
+    public String toString(){
+        return exceptionString+"Input should have one start position.";
+    }
+}
+
+class GoalPositionException extends InputParseException{
+    public String toString(){
+        return exceptionString+"Input should have one goal position.";
+    }
+}
+
+class NumberOfRowsExceededException extends InputParseException{
+    int maxRows = -1;
+    public NumberOfRowsExceededException(int maxRows){
+        this.maxRows = maxRows;
+    }
+    public String toString(){
+        if(maxRows == -1) return exceptionString+"The number of rows must not be large.";
+        return exceptionString+"The number of rows must not exceed "+maxRows+".";
+    }
+}
+
+class NumberOfColumnsExceededException extends InputParseException{
+    int maxColumns = -1;
+    public NumberOfColumnsExceededException(int maxColumns){
+        this.maxColumns = maxColumns;
+    }
+    public String toString(){
+        if(maxColumns == -1) return exceptionString+"The number of columns must not be large.";
+        return exceptionString+"The number of columns must not exceed "+maxColumns+".";
+    }
+}
+
 class StateNotRecognizedException extends InputParseException{
     int positionX = -1, positionY = -1;
     public StateNotRecognizedException(int positionX, int positionY){

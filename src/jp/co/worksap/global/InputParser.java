@@ -58,9 +58,6 @@ public class InputParser{
                 mapObject.setBlock(iter, innerIter, tempBlock);
             }
         }
-        System.out.println("---");
-        mapObject.print();
-        System.out.println("---");
 
         return mapObject;
     }
