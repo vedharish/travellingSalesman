@@ -9,7 +9,7 @@ public class Orienteering{
         try{
             OrientMap mapObject = InputParser.getOrientMap(inputReader);
         }catch(InputParseException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 }

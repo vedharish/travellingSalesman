@@ -18,16 +18,24 @@ public class InputParser{
         try{
             mapObject = new OrientMap(Integer.parseInt(inputStrArray[0]), Integer.parseInt(inputStrArray[1]));
         }catch(ArrayIndexOutOfBoundsException e){
-            throw new InputParseException();
+            throw new SpaceException();
+        }catch(NumberFormatException e){
+            throw new IntegerException();
+        }
+
+        String inputString;
+        for(int iter=0; iter<mapObject.getNumOfRows(); iter++){
+            try{
+                inputString = inputReader.readLine();
+            }catch(IOException e){
+                throw new InputParseException();
+            }
+            if(inputString == null) throw new WrongNumRowsException();
+            inputString = inputString.trim();
+            if(inputString.length() != mapObject.getNumOfColumns()) throw new WrongNumColsException();
+            mapObject.print();
         }
 
         return mapObject;
-    }
-}
-
-class InputParseException extends IOException{
-    public static final String exceptionString = "Exception --- ";
-    public String toString(){
-        return exceptionString+"Unable to read from input";
     }
 }
