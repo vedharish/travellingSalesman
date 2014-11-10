@@ -9,10 +9,12 @@ public class Orienteering{
         OrientMap mapObject = null;
         try{
             mapObject = InputParser.getOrientMap(inputReader);
+            mapObject.validate();
+
+            mapObject.print();
+            System.out.println(Solver.solve(mapObject));
         }catch(InputParseException e){
             e.printStackTrace();
         }
-        mapObject.print();
-        Solver.solve(mapObject);
     }
 }
