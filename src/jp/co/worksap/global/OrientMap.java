@@ -22,9 +22,45 @@ public class OrientMap{
     public int getNumOfColumns(){
         return mapStruct[0].length;
     }
-    public int getDistance(Position place1, Position place2){
+    public int getDistance(Position place1, Position place2, ArrayList<Position> visited){
         //return -1 if place1 or place2 are CLOSED
         if(getBlock(place1) == OrientBlock.CLOSE || getBlock(place2) == OrientBlock.CLOSE) return -1;
+        if(place1.equals(place2)) return 0;
+        int distance = Integer.MAX_VALUE;
+
+        Position tempPosition;
+        if(place2.getCordiY()-1 >= 0){
+            tempPosition = new Position(place2.getCordiX(), place2.getCordiY()-1);
+            if(!this.getBlock(tempPosition).equals(OrientBlock.CLOSE) && !visited.contains(tempPosition)){
+                ArrayList<Position> tempVisited = (ArrayList<Position>) visited.clone();
+                tempVisited.add(tempPosition);
+                int tempDistance = getDistance(place1, tempPosition, tempVisited)+1;
+            }
+        }
+        if(place2.getCordiY()+1 < getNumOfRows){
+            tempPosition = new Position(place2.getCordiX(), place2.getCordiY()+1);
+            if(!this.getBlock(tempPosition).equals(OrientBlock.CLOSE) && !visited.contains(tempPosition)){
+                ArrayList<Position> tempVisited = (ArrayList<Position>) visited.clone();
+                tempVisited.add(tempPosition);
+                int tempDistance = getDistance(place1, tempPosition, tempVisited)+1;
+            }
+        }
+        if(place2.getCordiX()-1 >= 0){
+            tempPosition = new Position(place2.getCordiX()-1, place2.getCordiY());
+            if(!this.getBlock(tempPosition).equals(OrientBlock.CLOSE) && !visited.contains(tempPosition)){
+                ArrayList<Position> tempVisited = (ArrayList<Position>) visited.clone();
+                tempVisited.add(tempPosition);
+                int tempDistance = getDistance(place1, tempPosition, tempVisited)+1;
+            }
+        }
+        if(place2.getCordiX()+1 >= 0){
+            tempPosition = new Position(place2.getCordiX()+1, place2.getCordiY());
+            if(!this.getBlock(tempPosition).equals(OrientBlock.CLOSE) && !visited.contains(tempPosition)){
+                ArrayList<Position> tempVisited = (ArrayList<Position>) visited.clone();
+                tempVisited.add(tempPosition);
+                int tempDistance = getDistance(place1, tempPosition, tempVisited)+1;
+            }
+        }
         return 0;
     }
     public void setBlock(int row, int column, OrientBlock block) throws InputParseException{
@@ -78,5 +114,11 @@ class Position{
     }
     public int getCordiY(){
         return this.cordiY;
+    }
+    @Override
+    public boolean equals(Object object){
+        if(!(object instanceof Position)) return false;
+        Postion other = (Position) object;
+        return (this.getCordiX() == other.getCordiX() && this.getCordiY() == other.getCordiY());
     }
 }
