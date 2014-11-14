@@ -6,12 +6,18 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class Solver{
+    //Check all permutations of checkpoints on and below this limit
+    //Response is slow on increasing this higher that 9
     public static final int PERMUTE_CHECKPOINTS = 9;
 
     public static int solve(final OrientMap mapObject){
         int totalDistance;
         ArrayList<Position> checkPoints = mapObject.getCheckpoints();
         if(checkPoints.size() > PERMUTE_CHECKPOINTS){
+            //Greedy method for large number of checkpoints
+            //arrange the arrayList according to distance from startPosition
+            //move to nearest CheckPoint and repeat
+            //Gives faster result but it might not be accurate ie distance might not be shortest
             totalDistance = 0;
             while(checkPoints.size() != 0){
                 Collections.sort(checkPoints, new Comparator<Position>(){
@@ -25,17 +31,23 @@ public class Solver{
                 });
                 totalDistance += mapObject.moveStart(checkPoints.get(0));
             }
+            //move to goal
             totalDistance += mapObject.moveStart(mapObject.getGoal());
             return totalDistance;
         }else{
+            //Check all permutations for lower number of checkpoints
+            //Gives accurate result but slower
             totalDistance = Integer.MAX_VALUE;
             ArrayList<Position> checkPointsList = new ArrayList<Position>(checkPoints);
+
+            //get all permutations of numbers till checkPoints.size()
             ArrayList<String> permutationsList = new ArrayList<String>();
             int arr[] = new int[checkPointsList.size()];
             for(int iter=0; iter<checkPointsList.size(); iter++){
                 arr[iter] = iter;
             }
             permute(arr, 0, permutationsList);
+            
             Iterator<String> iter = permutationsList.iterator();
             while(iter.hasNext()){
                 int tempDistance = 0;
@@ -49,6 +61,8 @@ public class Solver{
                 tempDistance += tempMapObject.moveStart(mapObject.getGoal());
                 if(tempDistance < totalDistance) totalDistance = tempDistance;
             }
+
+            if(checkPointsList.size() == 0) return mapObject.moveStart(mapObject.getGoal());
             return totalDistance;
         }
     }

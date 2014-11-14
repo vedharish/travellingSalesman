@@ -11,10 +11,10 @@ public class Orienteering{
             mapObject = InputParser.getOrientMap(inputReader);
             mapObject.validate();
 
-            mapObject.print();
             System.out.println(Solver.solve(mapObject));
         }catch(InputParseException e){
-            e.printStackTrace();
+            System.out.println("-1");
+            //e.printStackTrace();
         }
     }
 }
