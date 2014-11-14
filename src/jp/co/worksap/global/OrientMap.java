@@ -1,8 +1,10 @@
 package jp.co.worksap.global;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OrientMap{
+    private static HashMap<String, Integer> memoizedDistanceMap = new HashMap<String, Integer>();
     private OrientBlock[][] mapStruct;
     private static final int MAX_ROWS = 1000000;
     private static final int MAX_COLUMNS = 1000000;
@@ -16,16 +18,44 @@ public class OrientMap{
         if(numOfColumns > MAX_COLUMNS) throw new NumberOfColumnsExceededException(MAX_COLUMNS);
         this.mapStruct = new OrientBlock[numOfRows][numOfColumns];
     }
+    public OrientMap(OrientMap otherMap){
+        this.mapStruct = otherMap.getMapStruct();
+        this.startPosition = otherMap.getStartPosition();
+        this.goalPosition = otherMap.getGoal();
+        this.checkList = otherMap.getCheckpoints();
+    }
+    private OrientBlock[][] getMapStruct(){
+        return mapStruct;
+    }
+    public Position getStartPosition(){
+        return startPosition;
+    }
+    public Position getGoal(){
+        return goalPosition;
+    }
     public int getNumOfRows(){
         return mapStruct.length;
     }
     public int getNumOfColumns(){
         return mapStruct[0].length;
     }
+    public int moveStart(Position toPlace){
+        int distance = getDistance(startPosition, toPlace, new ArrayList<Position>());
+        setBlock(toPlace, OrientBlock.START);
+        setBlock(startPosition, OrientBlock.OPEN);
+        checkList.remove(toPlace);
+        startPosition = toPlace;
+        return distance;
+    }
     public int getDistance(Position place1, Position place2, ArrayList<Position> visited){
         //return -1 if place1 or place2 are CLOSED
+        String mapKey = place1.toString()+"#"+place2.toString();
+
         if(getBlock(place1) == OrientBlock.CLOSE || getBlock(place2) == OrientBlock.CLOSE) return -1;
         if(place1.equals(place2)) return 0;
+
+        if(memoizedDistanceMap.containsKey(mapKey)) return memoizedDistanceMap.get(mapKey);
+        
         int distance = Integer.MAX_VALUE;
         boolean changeFlag = true;
 
@@ -79,6 +109,7 @@ public class OrientMap{
             }
         }
         if(changeFlag) return -1;
+        memoizedDistanceMap.put(mapKey, distance);
         return distance;
     }
     public void setBlock(int row, int column, OrientBlock block) throws InputParseException{
@@ -100,6 +131,12 @@ public class OrientMap{
     }
     public OrientBlock getBlock(Position position){
         return mapStruct[position.getCordiX()][position.getCordiY()];
+    }
+    public void setBlock(Position position, OrientBlock block){
+        mapStruct[position.getCordiX()][position.getCordiY()] = block;
+    }
+    public ArrayList<Position> getCheckpoints(){
+        return checkList;
     }
     public void validate() throws InputParseException{
         if(this.startPosition == null) throw new StartPositionException();
@@ -138,5 +175,9 @@ class Position{
         if(!(object instanceof Position)) return false;
         Position other = (Position) object;
         return (this.getCordiX() == other.getCordiX() && this.getCordiY() == other.getCordiY());
+    }
+    @Override
+    public String toString(){
+        return "Position - x "+cordiX+" y "+cordiY;
     }
 }
